@@ -12,7 +12,6 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      isAuthorEmpty: true,
     }
   },
   props: ['title', 'body', 'id', 'userId'],
