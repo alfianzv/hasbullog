@@ -39,6 +39,8 @@ export default {
   },
   mounted() {
     this.getAuthors();
+  },
+  updated() {
     if (this.$route.path.includes('author')) {
       let select = document.getElementById('authorsList');
       select.value = this.$route.params.id;
