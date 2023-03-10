@@ -60,33 +60,25 @@ describe('Navbar.vue', () => {
         expect(wrapper.isVueInstance()).toBe(true)
     })
 
-    test('Set selected author', () => {
-        const { store } = getStore()
-        const wrapper = mount(Navbar, {
+    test('fetch author on mount', () => {
+        const { store, actions } = getStore()
+        const wrapper = shallowMount(Navbar, {
             localVue,
             store,
             router
         })
-        const dropDown = wrapper.find('#authorsList').findAll('option')
-        dropDown.at(2).setSelected()
-        expect(wrapper.find('option:checked').element.innerHTML).toBe(store.state.authors[1].name)
+        expect(actions.getAuthors).toHaveBeenCalled()
     })
-    
-    test('test after click on any author, it should redirect to authorBlogs page', async () => {
+
+    test('redirects to author blogs', () => {
         const { store } = getStore()
-        const pushRoute = jest.fn();
         const wrapper = mount(Navbar, {
             localVue,
             store,
             router
         })
-        await wrapper.vm.$nextTick();
-        const options = wrapper.find('#authorsList').findAll('option');
-        await options.at(2).setSelected();
-        console.log(wrapper.vm.$route.name);
-        expect(pushRoute).toHaveBeenCalledWith({
-            name: 'authorBlogs',
-            params: { id: store.state.authors[1].id },
-        });
+        const link = wrapper.find('.dropdown a')
+        link.trigger('click')
+        expect(wrapper.vm.$route.path).toBe('/author/1')
     })
 })

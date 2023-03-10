@@ -6,8 +6,6 @@ import AuthorBlogs from '../pages/AuthorBlogs.vue'
 
 Vue.use(VueRouter)
 
-
-
 const routes = [
   {
     path: '/',

@@ -4,7 +4,10 @@
     <Wrapper>
       <img src="../assets/hasbulla.png" alt="">
       <input id="search" type="text" v-model="search" placeholder="Search by blogs title...">
-      <Blog v-for="p in blogPosts" :id="p.id" :title="p.title" :body="p.body" :userId="p.userId" :key="p.id"></Blog>
+      <h4 v-if="!blogPosts.length">
+        No posts found
+      </h4>
+      <Blog v-else v-for="p in blogPosts" :id="p.id" :title="p.title" :body="p.body" :userId="p.userId" :author="authorPost(p.userId)" :key="p.id"></Blog>
     </Wrapper>
     <Footer></Footer>
   </div>
@@ -31,12 +34,15 @@ export default {
   },
   methods: {
     ...mapActions(['getPosts']),
+    authorPost(userId) {
+      return this.authors[userId - 1];
+    }
   },
   computed: {
-    ...mapGetters(['posts', 'authors', 'searchPosts', 'filterAuthorsByUserId']),
+    ...mapGetters(['posts', 'authors', 'searchPosts']),
     blogPosts() {
       return this.searchPosts(this.posts, this.search);
-    }
+    },
   },
   mounted() {
     window.scrollTo(0, 0);

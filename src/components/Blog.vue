@@ -2,25 +2,17 @@
   <div>
     <router-link :to="{ name: 'blogDetail', params:  {id: id}  }"><h3>{{title}}</h3></router-link>
     <p>{{body}}</p>
-    <router-link class="author" :to="{ name: 'authorBlogs', params:  {id: userId}  }"><h5>By {{ currentAuthor[0].name }}</h5></router-link>
+    <router-link v-if="author" class="author" :to="{ name: 'authorBlogs', params:  {id: userId}  }"><h5>By {{ author.name }}</h5></router-link>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   data () {
     return {
     }
   },
-  props: ['title', 'body', 'id', 'userId'],
-  computed: {
-    ...mapGetters(['filterAuthorsByUserId']),
-    currentAuthor() {
-      return this.filterAuthorsByUserId(this.userId);
-    }
-  }
+  props: ['title', 'body', 'id', 'userId', 'author'],
 }
 </script>
 

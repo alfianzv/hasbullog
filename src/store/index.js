@@ -26,7 +26,8 @@ export default new Vuex.Store({
       return state.author;
     },
     filterAuthorsByUserId: (state) => (id) => {
-      return state.authors.filter(author => author.id == id);
+      if (id > state.authors.length) return null
+      return state.authors[id - 1];
     },
     searchPosts: () => (posts, search) => {
       return posts.filter(post => post.title.toLowerCase().includes(search.toLowerCase()));

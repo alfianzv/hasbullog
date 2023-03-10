@@ -8,10 +8,10 @@
         <router-link to="/">Home</router-link>
       </li>
       <li>
-        <select id="authorsList" @change="pushRoute">
-          <option value="" disabled selected hidden>Find Your Author</option>
-          <option v-for="a in authors" :value="a.id" :key="a.id">{{a.name}}</option>
-        </select>
+        <span>Authors</span>
+        <div class="dropdown">
+          <router-link v-for="a in authors" :to="{ name: 'authorBlogs', params:  {id: a.id}  }" :key="a.id">{{a.name}}</router-link>
+        </div>
       </li>
     </ul>
   </div>
@@ -28,23 +28,12 @@ export default {
   },
   methods: {
     ...mapActions(['getAuthors']),
-    pushRoute() {
-      let select = document.getElementById('authorsList');
-      this.id = select.value;
-      this.$router.push({ name: 'authorBlogs', params: { id: this.id } });
-    }
   },
   computed: {
     ...mapGetters(['authors']),
   },
   mounted() {
     this.getAuthors();
-  },
-  updated() {
-    if (this.$route.path.includes('author')) {
-      let select = document.getElementById('authorsList');
-      select.value = this.$route.params.id;
-    }
   }
 }
 </script>
@@ -76,16 +65,37 @@ export default {
     font-weight: bold;
     color: #845f39;
   }
-  select {
-    font-size: 1rem;
-    border: none;
-    background-color: transparent;
+  li span {
+    position: relative;
     color: white;
     font-weight: bold;
     text-decoration: none;
-    outline: none;
+    cursor: pointer;
   }
-  select option {
-    color: black;
+  li span:hover + .dropdown{
+    visibility: visible;
+  }
+  .dropdown {
+    visibility: hidden;
+    position: absolute;
+    right: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #2c3e50;
+    padding: 0.5rem 0;
+    border-radius: 0.25rem;
+    z-index: 1;
+  }
+
+  .dropdown:hover {
+    visibility: visible;
+  }
+
+  .dropdown a {
+    color: white;
+    font-weight: lighter;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
   }
 </style>

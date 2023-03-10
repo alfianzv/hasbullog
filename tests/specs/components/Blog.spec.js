@@ -18,6 +18,10 @@ const propsData = {
     body: 'Test Body',
     id: 2,
     userId: 1,
+    author: {
+        "id": 1,
+        "name": "Leanne Graham",
+    }
 }
 
 function getStore() {
@@ -35,9 +39,6 @@ function getStore() {
     }
 
     const getters = {
-        filterAuthorsByUserId: (state) => (id) => {
-            return state.authors.filter(author => author.id === id)
-        }
     }
 
     const options = {
@@ -55,7 +56,6 @@ function getStore() {
 }
 
 describe('Blog.vue', () => {
-// Still dont know how to check router
     test('Initialized well', () => {
         const { store } = getStore()
         const wrapper = shallowMount(Blog, {
@@ -65,19 +65,6 @@ describe('Blog.vue', () => {
             propsData,
         })
         expect(wrapper.isVueInstance()).toBe(true)
-    })
-
-    test('computed: currentAuthor', () => {
-        const { store } = getStore()
-        const wrapper = shallowMount(Blog, {
-            localVue,
-            store,
-            router,
-            propsData,
-        })
-        expect(wrapper.isVueInstance()).toBe(true)
-        const vm = wrapper.vm
-        expect(vm.currentAuthor[0].name).toBe(store.getters.filterAuthorsByUserId(propsData.userId)[0]?.name)
     })
 
     test('onclick navigate to blog detail page', () => {
@@ -92,6 +79,19 @@ describe('Blog.vue', () => {
         expect(wrapper.vm.$route.path).toBe('/blog/2')
     })
 
+    test('computed: author prop exist', () => {
+        const { store } = getStore()
+        const wrapper = shallowMount(Blog, {
+            localVue,
+            store,
+            router,
+            propsData,
+        })
+        const authorLink = wrapper.find('.author')
+        expect(authorLink.exists()).toBe(true)
+        expect(authorLink.text()).toBe("By " + propsData.author.name)
+    })
+
     test('onclick navigate to author blog page', () => {
         const { store } = getStore()
         const wrapper = mount(Blog, {
@@ -102,5 +102,20 @@ describe('Blog.vue', () => {
         })
         wrapper.find('a.author').trigger('click')
         expect(wrapper.vm.$route.path).toBe('/author/1')
+    })
+
+    test('computed: author prop not exist', () => {
+        const { store } = getStore()
+        const wrapper = shallowMount(Blog, {
+            localVue,
+            store,
+            router,
+            propsData: {
+                ...propsData,
+                author: null
+            }
+        })
+        const authorLink = wrapper.find('.author')
+        expect(authorLink.exists()).toBe(false)
     })
 })

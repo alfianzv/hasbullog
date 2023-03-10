@@ -4,8 +4,9 @@
     <Wrapper>
       <img src="../assets/hasbulla.png" alt="">
       <input id="search" type="text" v-model="search" placeholder="Search by blogs title...">
-      <h1 v-if="!isAuthorEmpty">{{ author[0].name }} Blogs</h1>
-      <Blog v-for="p in posts" :id="p.id" :title="p.title" :body="p.body" :userId="p.userId" :key="p.id"></Blog>
+      <h1 v-if="author">{{ author.name }} Blogs</h1>
+      <h4 v-if="!postsLength">No posts found</h4>
+      <Blog v-else v-for="p in posts" :id="p.id" :title="p.title" :body="p.body" :userId="p.userId" :key="p.id" :author="author"></Blog>
     </Wrapper>
     <Footer></Footer>
   </div>
@@ -27,27 +28,23 @@ export default {
   },
   data () {
     return {
-      search: '',
-      isAuthorEmpty: true,
+      search: ''
     }
   },
   methods: {
     ...mapActions(['getPosts']),
   },
   computed: {
-    ...mapGetters(['searchPosts', 'filterPostsByAuthorId', 'filterAuthorsByUserId']),
+    ...mapGetters(['authors', 'searchPosts', 'filterPostsByAuthorId', 'filterAuthorsByUserId']),
     posts() {
       return this.searchPosts(this.filterPostsByAuthorId(this.$route.params.id), this.search);
     },
+    postsLength() {
+      if (this.posts.length < 1) return null
+      return this.posts.length;
+    },
     author() {
       return this.filterAuthorsByUserId(this.$route.params.id);
-    }
-  },
-  watch: {
-    author() {
-      if (this.author.length > 0) {
-        this.isAuthorEmpty = false;
-      }
     }
   },
   mounted() {
