@@ -45,6 +45,7 @@ function getStore() {
                 "name": "Leanne Graham",
             },
         ],
+        error: null
     };
     const mutations = {
         
@@ -135,5 +136,20 @@ describe('Blogs.vue', () => {
 
         expect(wrapper.vm.blogPosts).toEqual([])
         expect(wrapper.find('h4').text()).toBe('No posts found')
+    })
+
+    test('error message is rendered', () => { 
+        const { store } = getStore()
+        const wrapper = shallowMount(Blogs, {
+            store,
+            localVue,
+            router,
+            methods,
+            computed: {
+                error: () => 'Request failed with status code 404'
+            }
+        })
+
+        expect(wrapper.find('.error').text()).toBe('Request failed with status code 404')
     })
 })

@@ -209,4 +209,24 @@ describe('Blogs.vue', () => {
         expect(wrapper.vm.author).toBe(null)
         expect(wrapper.find('h1').exists()).toBe(false)
     })
+
+    test('error message is rendered', () => { 
+        const { store } = getStore()
+        const wrapper = shallowMount(AuthorBlogs, {
+            store,
+            localVue,
+            mocks: {
+                $route: {
+                    params: {
+                        id: 1
+                    }
+                }
+            },
+            computed: {
+                error: () => 'Request failed with status code 404'
+            }
+        })
+
+        expect(wrapper.find('.error').text()).toBe('Request failed with status code 404')
+    })
 })

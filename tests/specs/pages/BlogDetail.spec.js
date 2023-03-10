@@ -18,7 +18,8 @@ function getStore() {
         author: {
             id: 1,
             name: 'John Doe'
-        }
+        },
+        error: null
     };
     const mutations = {
         clearPost(state) {
@@ -90,5 +91,18 @@ describe('BlogDetail.vue', () => {
         })
         await wrapper.vm.$options.watch.post.call(wrapper.vm)
         expect(getAuthor).toHaveBeenCalledTimes(1)
+    })
+
+    test('error message is rendered', () => {
+        const { store } = getStore()
+        const wrapper = shallowMount(BlogDetail, {
+            store,
+            localVue,
+            router,
+            computed: {
+                error: () => 'Request failed with status code 404'
+            }
+        })
+        expect(wrapper.find('.error').text()).toBe('Request failed with status code 404')
     })
 })

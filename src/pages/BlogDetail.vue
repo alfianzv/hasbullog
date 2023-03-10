@@ -1,13 +1,18 @@
 <template>
   <div>
     <Navbar></Navbar>
-    <Wrapper>
+    <Wrapper v-if="!error">
       <header>
         <h1>{{ post.title }}</h1>
         <p>Written by: {{ author.name }}</p>
       </header>
       <div>
         <p>{{ post.body }}</p>
+      </div>
+    </Wrapper>
+    <Wrapper v-else>
+      <div class="error">
+        {{ error }}
       </div>
     </Wrapper>
     <Footer></Footer>
@@ -35,7 +40,7 @@ export default {
     ...mapActions(['getPost', 'getAuthor']),
   },
   computed: {
-    ...mapGetters(['post', 'author']),
+    ...mapGetters(['post', 'author', 'error']),
   },
   mounted() {
     window.scrollTo(0, 0);

@@ -7,6 +7,9 @@
       <h1 v-if="author">{{ author.name }} Blogs</h1>
       <h4 v-if="!postsLength">No posts found</h4>
       <Blog v-else v-for="p in posts" :id="p.id" :title="p.title" :body="p.body" :userId="p.userId" :key="p.id" :author="author"></Blog>
+      <div class="error" v-if="error">
+        {{ error }}
+      </div>
     </Wrapper>
     <Footer></Footer>
   </div>
@@ -35,7 +38,7 @@ export default {
     ...mapActions(['getPosts']),
   },
   computed: {
-    ...mapGetters(['authors', 'searchPosts', 'filterPostsByAuthorId', 'filterAuthorsByUserId']),
+    ...mapGetters(['authors', 'searchPosts', 'filterPostsByAuthorId', 'filterAuthorsByUserId', 'error']),
     posts() {
       return this.searchPosts(this.filterPostsByAuthorId(this.$route.params.id), this.search);
     },
@@ -74,5 +77,11 @@ export default {
     border-radius: 0.25rem;
     margin: 1.5rem auto;
     padding: 1rem 0.5rem;
+  }
+  .error {
+    color: red;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 1rem;
   }
 </style>

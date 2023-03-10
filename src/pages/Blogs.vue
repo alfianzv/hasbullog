@@ -8,6 +8,9 @@
         No posts found
       </h4>
       <Blog v-else v-for="p in blogPosts" :id="p.id" :title="p.title" :body="p.body" :userId="p.userId" :author="authorPost(p.userId)" :key="p.id"></Blog>
+      <div class="error" v-if="error">
+        {{ error }}
+      </div>
     </Wrapper>
     <Footer></Footer>
   </div>
@@ -39,7 +42,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['posts', 'authors', 'searchPosts']),
+    ...mapGetters(['posts', 'authors', 'searchPosts', 'error']),
     blogPosts() {
       return this.searchPosts(this.posts, this.search);
     },
@@ -67,5 +70,11 @@ export default {
     border-radius: 0.25rem;
     margin: 1.5rem auto;
     padding: 1rem 0.5rem;
+  }
+  .error {
+    color: red;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 1rem;
   }
 </style>
